@@ -102,7 +102,7 @@ sf::RectangleShape Map::getSmallPlatformHitbox()
 	return this->smallPlatformHitbox.getRect();
 }
 
-//Functions
+// Public Functions
 void Map::render(sf::RenderTarget& target)
 {
 	//Setting position and render sky

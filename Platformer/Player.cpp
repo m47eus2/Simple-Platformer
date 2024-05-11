@@ -1,5 +1,6 @@
 #include "Player.h"
 
+//Private functions
 void Player::initTextures()
 {
 	if (!this->texture.loadFromFile("Textures/Character/character.png",sf::IntRect(13,7,19,28)))
@@ -40,6 +41,7 @@ void Player::setLeftTexture()
 	this->sprite.setScale(sf::Vector2f(-2.f, 2.f));
 }
 
+//Constructor destructor
 Player::Player()
 {
 	this->initTextures();
@@ -51,6 +53,7 @@ Player::~Player()
 {
 }
 
+//Public functions
 sf::Sprite Player::getSprite()
 {
 	return this->sprite;
@@ -81,6 +84,13 @@ sf::FloatRect Player::getPpos()
 	return this->ppos;
 }
 
+void Player::respawn()
+{
+	this->setRightTexture();
+	this->speedy = 0.f;
+	this->sprite.setPosition(sf::Vector2f(762.f, 0.f));
+}
+
 void Player::control()
 {
 	//Left
@@ -106,7 +116,6 @@ void Player::gravity()
 
 	this->sprite.move(0.f, this->speedy);
 }
-
 
 void Player::update()
 {

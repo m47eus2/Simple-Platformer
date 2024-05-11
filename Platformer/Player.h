@@ -35,6 +35,7 @@ public:
 	void setStanding(bool s);
 	void setPpos();
 	sf::FloatRect getPpos();
+	void respawn();
 
 	void update();
 	void render(sf::RenderTarget &target);

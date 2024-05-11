@@ -28,7 +28,7 @@ Game::~Game()
 	delete this->window;
 }
 
-//Getters
+//Public funxtions
 const bool Game::running() const
 {
 	return this->window->isOpen();
@@ -49,6 +49,8 @@ void Game::playerCollisions()
 	sf::FloatRect smallPlatformGlobalBounds = this->map.getSmallPlatformHitbox().getGlobalBounds();
 
 	//Window edges
+
+	//Left edge
 	if (playerGlobalBounds.left < 0)
 	{
 		//If texture is not mirrored
@@ -58,6 +60,7 @@ void Game::playerCollisions()
 			this->player.setPosition(playerGlobalBounds.width, this->player.getSprite().getPosition().y);
 	}
 
+	//Right edge
 	if (playerGlobalBounds.left + playerGlobalBounds.width > this->window->getSize().x)
 	{
 		//If texture is not mirrored
@@ -66,6 +69,10 @@ void Game::playerCollisions()
 		else
 			this->player.setPosition(this->window->getSize().x, this->player.getSprite().getPosition().y);
 	}
+
+	//Bottom
+	if (playerGlobalBounds.top > this->window->getSize().y)
+		this->player.respawn();
 
 	//Setting default not standing
 	this->player.setStanding(false);
@@ -105,7 +112,6 @@ void Game::playerCollisions()
 	}
 }
 
-//Functions
 void Game::pollEvents()
 {
 	while (this->window->pollEvent(this->ev))
