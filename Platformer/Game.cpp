@@ -13,6 +13,7 @@ void Game::initWindow()
 void Game::initVariables()
 {
 	this->window = nullptr;
+	this->standOnPlatform = false;
 }
 
 //Constructor destructor
@@ -33,30 +34,74 @@ const bool Game::running() const
 	return this->window->isOpen();
 }
 
+const bool Game::ifStandOnPlatform() const
+{
+	return this->standOnPlatform;
+}
+
 void Game::playerCollisions()
 {
-	//Window edges
-	if (this->player.getSprite().getGlobalBounds().left < 0)
-		this->player.setPosition(0.f, this->player.getSprite().getPosition().y);
-	if (this->player.getSprite().getGlobalBounds().left + this->player.getSprite().getGlobalBounds().width > this->window->getSize().x)
-		this->player.setPosition(this->window->getSize().x - this->player.getSprite().getGlobalBounds().width, this->player.getSprite().getPosition().y);
+	//Player global bounds
+	sf::FloatRect playerGlobalBounds = this->player.getSprite().getGlobalBounds();
+	//Platform global bounds
+	sf::FloatRect platformGlobalBounds = this->map.getPlatformHitbox().getGlobalBounds();
+	//Small platform global bounds
+	sf::FloatRect smallPlatformGlobalBounds = this->map.getSmallPlatformHitbox().getGlobalBounds();
 
-	//Platform
-	if (this->player.getSprite().getGlobalBounds().intersects(this->map.getPlatformHitbox().getGlobalBounds()))
+	//Window edges
+	if (playerGlobalBounds.left < 0)
 	{
-		this->player.setPosition(
-			this->player.getSprite().getPosition().x, 
-			this->map.getPlatformHitbox().getGlobalBounds().top - this->player.getSprite().getGlobalBounds().height);
-		this->player.setSpeedy(0.f);
+		//If texture is not mirrored
+		if(this->player.getSprite().getScale().x > 0)
+			this->player.setPosition(0.f, this->player.getSprite().getPosition().y);
+		else
+			this->player.setPosition(playerGlobalBounds.width, this->player.getSprite().getPosition().y);
+	}
+
+	if (playerGlobalBounds.left + playerGlobalBounds.width > this->window->getSize().x)
+	{
+		//If texture is not mirrored
+		if (this->player.getSprite().getScale().x > 0)
+			this->player.setPosition(this->window->getSize().x - playerGlobalBounds.width, this->player.getSprite().getPosition().y);
+		else
+			this->player.setPosition(this->window->getSize().x, this->player.getSprite().getPosition().y);
+	}
+
+	//Setting default not standing
+	this->player.setStanding(false);
+
+	//Platform collision
+	if (playerGlobalBounds.intersects(platformGlobalBounds))
+	{
+		//If player last y cord is above platform (checks if collision is with top surface)
+		if (this->player.getPpos().top + this->player.getPpos().height < platformGlobalBounds.top + 1)
+		{
+			//Set player positoin
+			this->player.setPosition(this->player.getSprite().getPosition().x, platformGlobalBounds.top - playerGlobalBounds.height);
+
+			//Reset player vertical speed
+			this->player.setSpeedy(0.f);
+
+			//Player is standing
+			this->player.setStanding(true);
+		}
 	}
 
 	//Small Platform
-	if (this->player.getSprite().getGlobalBounds().intersects(this->map.getSmallPlatformHitbox().getGlobalBounds()))
+	if (playerGlobalBounds.intersects(smallPlatformGlobalBounds))
 	{
-		this->player.setPosition(
-			this->player.getSprite().getPosition().x,
-			this->map.getSmallPlatformHitbox().getGlobalBounds().top - this->player.getSprite().getGlobalBounds().height);
-		this->player.setSpeedy(0.f);
+		//If player last y cord is above platform (checks if collision is with top surface)
+		if (this->player.getPpos().top + this->player.getPpos().height < smallPlatformGlobalBounds.top + 1)
+		{
+			//Sets player position
+			this->player.setPosition(this->player.getSprite().getPosition().x, smallPlatformGlobalBounds.top - playerGlobalBounds.height);
+
+			//Reset player vertical speed
+			this->player.setSpeedy(0.f);
+
+			//Player stands
+			this->player.setStanding(true);
+		}
 	}
 }
 
@@ -88,6 +133,8 @@ void Game::update()
 
 	//Collision
 	this->playerCollisions();
+
+	
 }
 
 //Render

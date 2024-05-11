@@ -17,6 +17,27 @@ void Player::initVariables()
 {
 	this->speedx = 5.f;
 	this->speedy = 0.f;
+	this->standing = false;
+
+	this->ppos = this->sprite.getGlobalBounds();
+}
+
+void Player::setRightTexture()
+{
+	//If mirroring texture correct position
+	if (this->sprite.getScale().x < 0.f)
+		this->sprite.move(-this->sprite.getGlobalBounds().width, 0.f);
+
+	this->sprite.setScale(sf::Vector2f(2.f, 2.f));
+}
+
+void Player::setLeftTexture()
+{
+	//If mirroring texture correct position
+	if (this->sprite.getScale().x > 0.f)
+		this->sprite.move(this->sprite.getGlobalBounds().width, 0.f);
+
+	this->sprite.setScale(sf::Vector2f(-2.f, 2.f));
 }
 
 Player::Player()
@@ -45,21 +66,43 @@ void Player::setSpeedy(float value)
 	this->speedy = value;
 }
 
+void Player::setStanding(bool s)
+{
+	this->standing = s;
+}
+
+void Player::setPpos()
+{
+	this->ppos = this->sprite.getGlobalBounds();
+}
+
+sf::FloatRect Player::getPpos()
+{
+	return this->ppos;
+}
+
 void Player::control()
 {
 	//Left
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	{
 		this->sprite.move(-this->speedx, 0.f);
+		this->setLeftTexture();
+	}
 	//Right
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	{
 		this->sprite.move(this->speedx, 0.f);
+		this->setRightTexture();
+	}
 }
 
 void Player::gravity()
 {
-	this->speedy += 0.3f;
+	this->speedy += 0.4f;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-		this->speedy = -8.f;
+		if(standing == true)
+			this->speedy = -12.f;
 
 	this->sprite.move(0.f, this->speedy);
 }
@@ -67,6 +110,7 @@ void Player::gravity()
 
 void Player::update()
 {
+	this->setPpos();
 	this->control();
 	this->gravity();
 }

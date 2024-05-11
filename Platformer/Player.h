@@ -11,9 +11,20 @@ private:
 	float speedx;
 	float speedy;
 
+	sf::FloatRect ppos;
+
+	bool standing;
+
 	void initTextures();
 	void initSprite();
 	void initVariables();
+
+	void setRightTexture();
+	void setLeftTexture();
+
+	void control();
+	void gravity();
+
 public:
 	Player();
 	virtual ~Player();
@@ -21,11 +32,10 @@ public:
 	sf::Sprite getSprite();
 	void setPosition(float x, float y);
 	void setSpeedy(float value);
-
-	void control();
-	void gravity();
+	void setStanding(bool s);
+	void setPpos();
+	sf::FloatRect getPpos();
 
 	void update();
 	void render(sf::RenderTarget &target);
 };
-

@@ -15,6 +15,8 @@ class Game
 
 	Player player;
 
+	bool standOnPlatform;
+
 	//Private functions
 	void initVariables();
 	void initWindow();
@@ -26,6 +28,7 @@ public:
 
 	//Getters
 	const bool running() const;
+	const bool ifStandOnPlatform() const;
 
 	//Functions
 	void playerCollisions();
