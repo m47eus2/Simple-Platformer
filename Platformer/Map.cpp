@@ -76,8 +76,8 @@ void Map::initSprites()
 
 void Map::initHitboxes()
 {
-	this->platformHitbox.set(sf::Vector2f(473.f, 405.f), sf::Vector2f(327.f, 1.f));
-	this->smallPlatformHitbox.set(sf::Vector2f(105.f, 308.f), sf::Vector2f(185.f, 1.f));
+	this->platformHitbox.set(sf::Vector2f(485.f, 405.f), sf::Vector2f(315.f, 1.f)); // 473
+	this->smallPlatformHitbox.set(sf::Vector2f(120.f, 308.f), sf::Vector2f(160.f, 1.f)); //105 185
 }
 
 //Constructor destructor

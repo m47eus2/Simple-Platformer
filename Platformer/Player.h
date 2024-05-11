@@ -2,11 +2,13 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <vector>
+
 class Player
 {
 private:
 	sf::Sprite sprite;
-	sf::Texture texture;
+	std::vector<sf::Texture> textures;
 
 	float speedx;
 	float speedy;
@@ -14,6 +16,11 @@ private:
 	sf::FloatRect ppos;
 
 	bool standing;
+
+	int animationTimer;
+	int animationTimerMax;
+	int animationFrame;
+	bool animation;
 
 	void initTextures();
 	void initSprite();
@@ -24,6 +31,7 @@ private:
 
 	void control();
 	void gravity();
+	void animate();
 
 public:
 	Player();
@@ -36,6 +44,9 @@ public:
 	void setPpos();
 	sf::FloatRect getPpos();
 	void respawn();
+	void resetAnimationTimer();
+	void setAnimationFrameStanding();
+	void setAnimationFrameRunning();
 
 	void update();
 	void render(sf::RenderTarget &target);

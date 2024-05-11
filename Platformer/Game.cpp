@@ -139,8 +139,6 @@ void Game::update()
 
 	//Collision
 	this->playerCollisions();
-
-	
 }
 
 //Render
